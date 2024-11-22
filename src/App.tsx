@@ -1,3 +1,4 @@
+import Form from "./components/form";
 import { people } from "./lib/data";
 
 function App() {
@@ -110,6 +111,9 @@ function App() {
           </div>
         </div>
       </div>
+
+      <Form />
+
     </main>
   );
 }
