@@ -2,8 +2,8 @@
 function App() {
 
   return (
-    <main>
-      Hello
+    <main className="min-h-screen flex flex-col gap-12">
+      
     </main>
   );
 }
