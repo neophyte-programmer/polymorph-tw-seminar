@@ -3,7 +3,7 @@ import { people } from "./lib/data";
 
 function App() {
   return (
-    <main className="min-h-screen flex flex-col gap-12">
+    <main className="min-h-screen flex flex-col gap-12 p-8">
 
       {/* USE CASES - first, last, even, odd */}
       <h1 className="text-2xl font-bold text-center">People List</h1>
@@ -20,8 +20,8 @@ function App() {
                 <li
                   key={person.id}
                   className={`
-                  ${index === 0 ? "bg-green-100" : ""} 
-                  ${index === people.length - 1 ? "bg-blue-100" : ""}
+                  ${index === 0 ? "bg-success" : ""} 
+                  ${index === people.length - 1 ? "bg-info" : ""}
                 `}
                 >
                   <div className="p-4">
@@ -44,7 +44,7 @@ function App() {
               {people.map((person) => (
                 <li
                   key={person.id}
-                  className="p-4 first:bg-green-100 last:bg-blue-100"
+                  className="p-4 first:bg-success last:bg-info"
                 >
                   <div>
                     <img
@@ -72,7 +72,7 @@ function App() {
                 <li
                   key={person.id}
                   className={`
-                  ${index % 2 === 0 ? "bg-gray-100" : "bg-gray-200"}
+                  ${index % 2 === 0 ? "bg-gray-light" : "bg-gray"}
                 `}
                 >
                   <div className="p-4">
@@ -95,7 +95,7 @@ function App() {
               {people.map((person) => (
                 <li
                   key={person.id}
-                  className="p-4 even:bg-gray-100 odd:bg-gray-200"
+                  className="p-4 even:bg-gray-light odd:bg-gray"
                 >
                   <div>
                     <img
@@ -170,18 +170,18 @@ function App() {
 
         </div>
       </div>
-      <div className="grid grid-cols-4 gap-8">
+      <div className="grid grid-cols-2 gap-8">
         <div>
           <h2>LINE CLAMP</h2>
 
-          <section className="space-y-4 border">
+          <section className="space-y-4 ">
             <h2 className="text-xl font-semibold">Line Clamp Example</h2>
             <ul>
               {people.map((person) => (
-                <li key={person.id} className="flex flex-col items-center space-x-4 border">
+                <li key={person.id} className="flex flex-col items-center space-x-4 ">
                   <div className="w-12 h-12 bg-gray-300 rounded-full"></div> {/* Placeholder for image */}
                   <p className="line-clamp-1">{person.name}</p>
-                  <p className="line-clamp-1 hover:line-clamp-none">{person.description}</p>
+                  <p className="line-clamp-2 hover:line-clamp-none">{person.description}</p>
                 </li>
               ))}
             </ul>
