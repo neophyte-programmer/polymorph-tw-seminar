@@ -1,25 +1,34 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 
-function Form() {
-    const [formData, setFormData] = useState({
-        email: "",
-        age: "",
-        terms: false,
+function App() {
+    const formik = useFormik({
+        initialValues: {
+            email: "",
+            age: "",
+            terms: false,
+        },
+        validationSchema: Yup.object({
+            email: Yup.string().email("Invalid email format").required("Email is required"),
+            age: Yup.number()
+                .min(18, "Age must be at least 18")
+                .max(65, "Age must be at most 65")
+                .required("Age is required"),
+        }),
+        onSubmit: (values) => {
+            alert(JSON.stringify(values, null, 2));
+        },
     });
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value, type, checked } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: type === "checkbox" ? checked : value,
-        }));
-    };
 
     return (
         <main className="min-h-screen flex flex-col gap-12 p-8">
             <h1 className="text-2xl font-bold text-center">Form State Use Cases</h1>
 
-            <div className="space-y-8 container mx-auto">
+            <form
+                onSubmit={formik.handleSubmit}
+                className="space-y-8 container mx-auto"
+            >
                 {/* Required State */}
                 <section className="space-y-4">
                     <h2 className="text-xl font-semibold">`required` State</h2>
@@ -27,10 +36,20 @@ function Form() {
                         type="text"
                         name="email"
                         placeholder="Enter your email"
-                        className="border p-2 required:border-red-500 required:bg-red-50"
-                        required
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.email}
+                        className={`border p-2 ${formik.errors.email && formik.touched.email
+                                ? "border-danger bg-danger-light"
+                                : "border-gray-light"
+                            }`}
                     />
-                    <p className="text-sm text-gray-600">The input border turns red if required and left empty.</p>
+                    {formik.touched.email && formik.errors.email && (
+                        <p className="text-danger text-sm">{formik.errors.email}</p>
+                    )}
+                    <p className="text-sm text-gray-600">
+                        The input border turns red if required and left empty.
+                    </p>
                 </section>
 
                 {/* Valid and Invalid States */}
@@ -39,12 +58,23 @@ function Form() {
                     <input
                         type="email"
                         name="email"
-                        value={formData.email}
-                        onChange={handleChange}
                         placeholder="Enter a valid email"
-                        className="border p-2 invalid:border-red-500 valid:border-green-500"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.email}
+                        className={`border p-2 ${formik.errors.email && formik.touched.email
+                                ? "border-danger"
+                                : formik.touched.email
+                                    ? "border-success"
+                                    : "border-gray-light"
+                            }`}
                     />
-                    <p className="text-sm text-gray-600">The input border changes to red if invalid or green if valid.</p>
+                    {formik.touched.email && formik.errors.email && (
+                        <p className="text-danger text-sm">{formik.errors.email}</p>
+                    )}
+                    <p className="text-sm text-gray-600">
+                        The input border changes to red if invalid or green if valid.
+                    </p>
                 </section>
 
                 {/* In-range and Out-of-range States */}
@@ -53,13 +83,22 @@ function Form() {
                     <input
                         type="number"
                         name="age"
-                        value={formData.age}
-                        onChange={handleChange}
                         placeholder="Enter your age (18-65)"
-                        className="border p-2 in-range:border-green-500 out-of-range:border-red-500"
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.age}
+                        className={`border p-2 ${formik.errors.age && formik.touched.age
+                                ? "border-danger"
+                                : formik.touched.age
+                                    ? "border-success"
+                                    : "border-gray-light"
+                            }`}
                         min="18"
                         max="65"
                     />
+                    {formik.touched.age && formik.errors.age && (
+                        <p className="text-danger text-sm">{formik.errors.age}</p>
+                    )}
                     <p className="text-sm text-gray-600">
                         The input border turns green if within range and red if out of range.
                     </p>
@@ -72,10 +111,12 @@ function Form() {
                         type="text"
                         name="email"
                         placeholder="Autofill your email"
-                        className="border p-2 autofill:bg-blue-50"
+                        className="border p-2 autofill:bg-info"
                         autoComplete="email"
                     />
-                    <p className="text-sm text-gray-600">The background color changes when autofilled by the browser.</p>
+                    <p className="text-sm text-gray-600">
+                        The background color changes when autofilled by the browser.
+                    </p>
                 </section>
 
                 {/* Indeterminate State */}
@@ -83,19 +124,27 @@ function Form() {
                     <h2 className="text-xl font-semibold">`indeterminate` State</h2>
                     <IndeterminateCheckbox />
                     <p className="text-sm text-gray-600">
-                        The checkbox appears in an indeterminate state when neither checked nor unchecked.
+                        The checkbox appears in an indeterminate state when neither checked
+                        nor unchecked.
                     </p>
                 </section>
-            </div>
+
+                <button
+                    type="submit"
+                    className="bg-blue-500 text-white py-2 px-4 rounded"
+                >
+                    Submit
+                </button>
+            </form>
         </main>
     );
 }
 
 // Component for Indeterminate Checkbox
 const IndeterminateCheckbox = () => {
-    const ref = React.useRef<HTMLInputElement>(null);
+    const ref = useRef<HTMLInputElement>(null);
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (ref.current) {
             ref.current.indeterminate = true; // Set indeterminate state programmatically
         }
@@ -106,11 +155,11 @@ const IndeterminateCheckbox = () => {
             <input
                 type="checkbox"
                 ref={ref}
-                className="w-4 h-4 text-blue-600 border-gray-300 indeterminate:bg-yellow-300"
+                className="w-4 h-4 text-blue-600 border-gray-light indeterminate:bg-warning"
             />
             <span>Terms and Conditions</span>
         </label>
     );
 };
 
-export default Form;
+export default App;

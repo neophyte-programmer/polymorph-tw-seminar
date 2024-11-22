@@ -114,6 +114,93 @@ function App() {
 
       <Form />
 
+
+      <div>
+        <h1 className="text-2xl font-bold text-center">Arbitrary Poperties Use Case</h1>
+        <div className="grid grid-cols-2 gap-12">
+          <section className="space-y-4 text-center">
+            <h2 className="text-xl font-semibold">With `style` Prop</h2>
+            <div>
+              {/* Static Background Gradient */}
+              <div
+                style={{
+                  background: "linear-gradient(to right, #34d399, #3b82f6)",
+                  width: "200px",
+                  height: "100px",
+                  borderRadius: "12px",
+                }}
+              >
+                <p className="text-white">Static Gradient</p>
+              </div>
+              {/* Limited Modifiers Example */}
+              <div
+                className="mt-4"
+                style={{
+                  background: "linear-gradient(to right, #f87171, #facc15)",
+                  width: "200px",
+                  height: "100px",
+                  borderRadius: "12px",
+                  opacity: 0.5, // Can't easily add hover or responsive states
+                }}
+              >
+                <p className="text-white">No hover or responsive control</p>
+              </div>
+            </div>
+          </section>
+
+          {/* Using Tailwind Arbitrary Properties */}
+          <section className="space-y-4 text-center">
+            <h2 className="text-xl font-semibold">With Tailwind Arbitrary Properties</h2>
+            <div>
+              {/* Static Background Gradient */}
+              <div className="bg-[linear-gradient(to_right,_#34d399,_#3b82f6)] w-48 h-24 rounded-xl flex items-center justify-center">
+                <p className="text-white">Static Gradient</p>
+              </div>
+              {/* Modifier Example: Hover */}
+              <div className="mt-4 bg-[linear-gradient(to_right,_#f87171,_#facc15)] w-48 h-24 rounded-xl flex items-center justify-center hover:opacity-100 opacity-50">
+                <p className="text-white">Hover for full opacity</p>
+              </div>
+              {/* Responsive Example */}
+              <div className="mt-4 bg-[linear-gradient(to_right,_#8b5cf6,_#5b21b6)] w-48 h-24 rounded-xl flex items-center justify-center sm:bg-[linear-gradient(to_right,_#ec4899,_#be185d)]">
+                <p className="text-white">Responsive Gradient</p>
+              </div>
+            </div>
+          </section>
+
+
+        </div>
+      </div>
+      <div className="grid grid-cols-4 gap-8">
+        <div>
+          <h2>LINE CLAMP</h2>
+
+          <section className="space-y-4 border">
+            <h2 className="text-xl font-semibold">Line Clamp Example</h2>
+            <ul>
+              {people.map((person) => (
+                <li key={person.id} className="flex flex-col items-center space-x-4 border">
+                  <div className="w-12 h-12 bg-gray-300 rounded-full"></div> {/* Placeholder for image */}
+                  <p className="line-clamp-1">{person.name}</p>
+                  <p className="line-clamp-1 hover:line-clamp-none">{person.description}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </div>
+
+        <section className="space-y-4">
+          <h2 className="text-xl font-semibold">Text Truncate</h2>
+          <ul>
+            {people.map((person) => (
+              <li key={person.id} className="flex items-center space-x-4">
+                <p className="truncate max-w-[200px]">{person.description}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+        
+        
+      </div>
     </main>
   );
 }
